@@ -3,10 +3,10 @@
 
 %table#movies
   %thead
-    %tr
-      %th Movie Title
+    %tr	
+      %th= link_to 'Movie Title', :sortby=>'title' 	
       %th Rating
-      %th Release Date
+      %th= link_to 'Release Date', :sortby=>'release_date'
       %th More Info
   %tbody
     - @movies.each do |movie|
