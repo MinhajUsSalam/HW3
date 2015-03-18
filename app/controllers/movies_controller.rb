@@ -4,7 +4,18 @@ class MoviesController < ApplicationController
   def index
     sort = params[:sortby]
     @sort = sort
-    @movies = Movie.order(@sort).all
+    @ratingsVec = []
+    @ratingsHash = {}	
+    @all_ratings = ['G', 'PG', 'PG-13', 'R']
+    if(params[:ratings])
+	params[:ratings].each_key do |r|
+	  @ratingsVec.push(r)
+          @ratingsHash[r] = r
+	end
+        @movies = Movie.find(:all, :order=>@sortby, :conditions => {:rating =>@ratingsVec})
+    else				
+    	@movies = Movie.order(@sort).all
+    end
   #  @sort = sort	
   end
 
