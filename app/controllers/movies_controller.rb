@@ -3,6 +3,9 @@ class MoviesController < ApplicationController
 
   def index
     sort = params[:sortby]
+    if(params[:sortby])	
+    	session[:sortby] = sort
+    end	
     @sort = sort
     @ratingsVec = []
     @ratingsHash = {}	
@@ -13,8 +16,13 @@ class MoviesController < ApplicationController
           @ratingsHash[r] = r
 	end
         @movies = Movie.find(:all, :order=>@sortby, :conditions => {:rating =>@ratingsVec})
-    else				
-    	@movies = Movie.order(@sort).all
+	session[:ratings] = @ratingHash
+    else			
+	if (session[:ratings])
+		flash.keep
+		redirect_to_movies_path(:sorby=>session[:sortby], :ratings=>sessions[:ratings])	
+	end    
+	@movies = Movie.order(@sort).all
     end
   #  @sort = sort	
   end
