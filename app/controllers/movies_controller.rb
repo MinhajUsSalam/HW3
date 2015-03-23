@@ -10,19 +10,35 @@ class MoviesController < ApplicationController
     @ratingsVec = []
     @ratingsHash = {}	
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
-    if(params[:ratings])
+    if(!params[:ratings] && !params[:sortby])
+      @movies = Movie.order(@sort).all
+      session.delete(:sortby)
+      session.delete(:ratings)
+    elsif (params[:ratings] && !params[:sortby])
 	params[:ratings].each_key do |r|
 	  @ratingsVec.push(r)
           @ratingsHash[r] = r
 	end
-        @movies = Movie.find(:all, :order=>@sortby, :conditions => {:rating =>@ratingsVec})
-	session[:ratings] = @ratingHash
+        session[:ratings] = params[:ratings] 
+        if(!session[:sortby])
+         @movies = Movie.find(:all, :order=>@sortby, :conditions => {:rating =>@ratingsVec})
+        else
+         @movies = Movie.order(session[:sortby]).find(:all, :order=>@sortby, :conditions => {:rating => @ratingsVec})
+        end
+#	session[:ratings] = @ratingHash
     else			
 	if (session[:ratings])
-		flash.keep
-		redirect_to_movies_path(:sorby=>session[:sortby], :ratings=>sessions[:ratings])	
-	end    
-	@movies = Movie.order(@sort).all
+                session[:ratings].each_key do |r|
+                  @ratingsVec.push(r)
+                  @ratingsHash[r] = r
+                end
+#		flash.keep
+	#	@movies = Movie.order(@sort).all
+#		redirect_to_movies_path(:sorby=>session[:sortby], :ratings=>sessions[:ratings])	
+                @movies = Movie.order(@sort).find(:all, :order=>@sortby, :conditions => {:rating =>@ratingsVec}) 
+        else    
+	        @movies = Movie.order(@sort).all
+        end
     end
   #  @sort = sort	
   end
