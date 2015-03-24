@@ -9,7 +9,7 @@ class MoviesController < ApplicationController
     @sort = sort
     @ratingsVec = []
     @ratingsHash = {}	
-    @all_ratings = ['G', 'PG', 'PG-13', 'R']
+    @all_ratings = ['G', 'PG', 'PG-13', 'R', 'NC-17']
     if(!params[:ratings] && !params[:sortby])
       @movies = Movie.order(@sort).all
       session.delete(:sortby)
