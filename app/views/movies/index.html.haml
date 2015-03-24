@@ -13,7 +13,7 @@
   %thead
     %tr	
       %th{:class=>[("hilite" unless @sort != "title")]}= link_to 'Movie Title', :sortby=>'title', :ratings=>@ratingsHash 	
-      %th Rating
+      %th{:class =>[("hilite" unless @sort != "rating")]}= link_to 'Rating', :sortby => 'rating' 
       %th{:class=>[("hilite" unless @sort != "release_date")]}= link_to 'Release Date', :sortby=>'release_date', :ratings=>@ratingsHash
       %th More Info
   %tbody
